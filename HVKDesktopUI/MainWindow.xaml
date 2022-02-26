@@ -1,0 +1,33 @@
+﻿<Window x:Class="HVKDesktopUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ViewModels="clr-namespace:HVKDesktopUI.ViewModels"
+        xmlns:wpfEx="clr-namespace:WpfExtensions"
+        xmlns:views="clr-namespace:HVKDesktopUI.Views" xmlns:viewmodels="clr-namespace:HVKDesktopUI.ViewModels" xmlns:components="clr-namespace:HVKDesktopUI.Components" d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        mc:Ignorable="d"
+        Title="HVK Server manager" Height="700" Width="1000" WindowStyle="SingleBorderWindow"
+        Background="#2d2d2d">
+    <Grid>
+        <ContentControl Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">
+                    <views:HomeView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:ServerListViewModel}">
+                    <views:ServerList />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:ServerViewModel}">
+                    <views:ServerView />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type viewmodels:LayoutViewModel}">
+                    <components:Layout/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+        <!--<views:ServerView Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" Loaded="ServerView_Loaded" />-->
+        <!--<views:ServerList Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" DataContext="{Binding CurrentViewModel}"/>-->
+        <!--<views:HomeView Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="4" />-->
+    </Grid>
+</Window>
