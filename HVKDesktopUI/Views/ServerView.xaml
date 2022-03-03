@@ -229,7 +229,6 @@
             <Rectangle  HorizontalAlignment="Stretch" Fill="Gray" Height="1" Margin="0 0 0 20"/>
         </StackPanel>
 
-
         <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
