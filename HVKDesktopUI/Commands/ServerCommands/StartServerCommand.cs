@@ -3,6 +3,7 @@ using HVKClassLibary.Shared;
 using HVKDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -13,21 +14,23 @@ namespace HVKDesktopUI.Commands
 {
     public class StartServerCommand : CommandBase
     {
-        private Server _server;
+        private ServerViewModel ServerViewModel;
 
-        public StartServerCommand(Server server)
+        public StartServerCommand(ServerViewModel serverViewModel)
         {
-            _server = server;
+            ServerViewModel = serverViewModel;
         }
 
         public async override void Execute(object parameter)
         {
-            if (_server.On)
+            if (ServerViewModel._server.On)
             {
+                Trace.WriteLine("Server on");
                 try
                 {
-                    await ServerProcessor.ServerSpecificAction(_server.Id, "stop");
+                    await ServerProcessor.ServerSpecificAction(ServerViewModel._server.Id, "stop");
                     MessageBox.Show("Server stoppet");
+                    ServerViewModel.IsOnline = false;
                 }
                 catch (HttpRequestException e)
                 {
@@ -36,10 +39,12 @@ namespace HVKDesktopUI.Commands
             }
             else
             {
+                Trace.WriteLine("Server off");
                 try
                 {
-                    await ServerProcessor.ServerSpecificAction(_server.Id, "start");
+                    await ServerProcessor.ServerSpecificAction(ServerViewModel._server.Id, "start");
                     MessageBox.Show("Server starter, der kan gå op til 60 sekunder før du kan joine serveren");
+                    ServerViewModel.IsOnline = true;
                 }
                 catch (HttpRequestException e)
                 {

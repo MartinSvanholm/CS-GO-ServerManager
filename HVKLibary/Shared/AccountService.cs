@@ -12,12 +12,12 @@ namespace HVKClassLibary.Shared
     {
         public static bool IsLoggedIn { get; set; }
 
-        public static Account Account { get; set; }
+        public static Account Account { get; set; } = new();
 
-        public static async Task Login(Account account)
+        public static async Task Login()
         {
-            ApiHelper.Email = account.Email;
-            ApiHelper.Password = account.Password;
+            ApiHelper.Email = Account.Email;
+            ApiHelper.Password = Account.Password;
 
             ApiHelper.InitializeClient();
 
@@ -28,12 +28,13 @@ namespace HVKClassLibary.Shared
                 if (response.IsSuccessStatusCode)
                 {
                     Trace.WriteLine($"Login succesfull");
-                    Account = account;
                 }
                 else
                 {
                     ApiHelper.Email = "";
                     ApiHelper.Password = "";
+
+                    Account = new();
 
                     ApiHelper.InitializeClient();
 

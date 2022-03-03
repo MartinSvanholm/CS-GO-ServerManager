@@ -12,18 +12,11 @@ namespace HVKDesktopUI.Commands.ServerCommands
 {
     public class LoginCommand : CommandBase
     {
-        private readonly Account _account;
-
-        public LoginCommand(Account account)
-        {
-            _account = account;
-        }
-
         public async override void Execute(object parameter)
         {
             try
             {
-                await AccountService.Login(_account);
+                await AccountService.Login();
                 MessageBox.Show("Du er logged ind");
             }
             catch (HttpRequestException e)

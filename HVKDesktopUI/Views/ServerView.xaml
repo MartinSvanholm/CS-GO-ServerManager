@@ -8,8 +8,69 @@
              xmlns:viewmodels="clr-namespace:HVKDesktopUI.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ServerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Viewbox>
+                            <Border x:Name="Border" CornerRadius="10"
+                            Background="#FFFFFFFF"
+                            Width="40" Height="20">
+                                <Border.Effect>
+                                    <DropShadowEffect ShadowDepth="0.5" Direction="0" Opacity="0.3" />
+                                </Border.Effect>
+                                <Ellipse x:Name="Ellipse" Fill="#FFFFFFFF" Stretch="Uniform"
+                                 Margin="2 1 2 1"
+                                 Stroke="Gray" StrokeThickness="0.2"
+                                 HorizontalAlignment="Stretch">
+                                    <Ellipse.Effect>
+                                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Opacity="0.3" Direction="260" />
+                                    </Ellipse.Effect>
+                                </Ellipse>
+                            </Border>
+                        </Viewbox>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="Checked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="#FF4CD661"
+                                                    Duration="0:0:0.1" />
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="20 1 2 1"
+                                                        Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="Unchecked">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetName="Border"
+                                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)"
+                                                    To="White"
+                                                    Duration="0:0:0.1" />
+                                        <ThicknessAnimation Storyboard.TargetName="Ellipse"
+                                                        Storyboard.TargetProperty="Margin"
+                                                        To="2 1 2 1"
+                                                        Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -32,11 +93,23 @@
                 Foreground="White" 
                 Style="{StaticResource ViewHeader}"/>
 
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Text="Server " Foreground="White" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding IsOnString}" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Text=" ... " Foreground="White" FontSize="14" VerticalAlignment="Center"  Margin="0 0 10 0"/>
+                <ToggleButton
+                    Grid.Row="0" 
+                    Content="{Binding ControlButtonText}" 
+                    FontSize="14"
+                    Command="{Binding StartServerCommand}"
+                    VerticalAlignment="Center" />
+            </StackPanel>
+
         </Grid>
 
         <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Style="{StaticResource Separator}"/>
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="0 10 0 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
@@ -47,38 +120,46 @@
                 Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem egestas, tempus eros in, semper ex. Nullam tellus metus, ultrices non nulla at, condimentum posuere mauris. Morbi eget posuere odio, nec rhoncus justo. Pellentesque at malesuada nunc, quis cursus massa. Cras interdum mi vitae erat mattis, at pellentesque lorem."
                 Foreground="White"
                 TextWrapping="Wrap"
-                FontSize="14" />
+                FontSize="14" 
+                Margin="0 0 20 0"/>
 
-            <Grid Grid.Column="1" Margin="50 0 0 0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
+            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="1" Padding="20 10" VerticalAlignment="Center">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
 
-                <Button
-                    Grid.Row="0" 
-                    Content="{Binding ControlButtonText}" 
-                    Padding="5,1,5,1" 
-                    Margin="0 10 0 0" 
-                    FontSize="14"
-                    Command="{Binding StartServerCommand}"/>
+                    <TextBlock
+                    Grid.Row="0"
+                    Text="Connection ip:"
+                    Foreground="White" 
+                    FontSize="14"/>
 
-                <Grid Grid.Row="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                        <ColumnDefinition Width="auto" />
-                    </Grid.ColumnDefinitions>
+                    <Rectangle Grid.Row="1" Style="{StaticResource Separator}" HorizontalAlignment="Stretch"/>
 
-                    <TextBlock Grid.Column="0" Text="Server " Foreground="White" Margin="0 0 0 10" FontSize="14"/>
-                    <TextBlock Grid.Column="1" Text="{Binding On}" Foreground="White" Margin="0 0 0 10" FontSize="14"/>
-                    <TextBlock Grid.Column="2" Text=" ..." Foreground="White" Margin="0 0 0 10" FontSize="14"/>
+                    <TextBox
+                    IsReadOnly="True"
+                    Grid.Row="2"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Foreground="White"
+                    Text="{Binding ConnectIP, Mode=OneWay}" 
+                    BorderThickness="0"
+                    FontSize="14" SelectionTextBrush="{x:Null}" Cursor="IBeam"/>
                 </Grid>
-            </Grid>
+            </Border>
         </Grid>
 
-        <Rectangle Grid.Row="3" HorizontalAlignment="Stretch" Style="{StaticResource Separator}" Margin="0 20 0 20"/>
+        <StackPanel Grid.Row="3">
+            <TextBlock
+                Text="Kamp commands"
+                Foreground="White" 
+                FontSize="14"
+                Margin="0 35 0 0"/>
+            <Rectangle  HorizontalAlignment="Stretch" Fill="Gray" Height="1" Margin="0 0 0 20"/>
+        </StackPanel>
 
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
@@ -89,55 +170,71 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                </Grid.RowDefinitions>
-
-                <TextBlock
-                    Grid.Row="0"
-                    Text="Connection ip"
-                    Foreground="White" 
-                    FontSize="14"/>
-
-                <Rectangle Grid.Row="1" Style="{StaticResource Separator}" HorizontalAlignment="Stretch"/>
-
-                <TextBox
-                    IsReadOnly="True"
-                    Grid.Row="2"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    Foreground="White"
-                    Text="{Binding ConnectIP, Mode=OneWay}" 
-                    BorderThickness="0"
-                    FontSize="14" SelectionTextBrush="{x:Null}" Cursor="IBeam"/>
-            </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
             <Button
-                Grid.Column="2"
+                Grid.Row="0"
+                Grid.Column="0"
                 Content="Start kamp"
                 Padding="5,1,5,1"
-                FontSize="14" 
-                MaxHeight="27"
+                FontSize="14"
+                Cursor="Hand"
                 Command="{Binding StartGameCommand}"/>
 
             <Button
+                Grid.Row="0"
+                Grid.Column="2"
+                Content="Pause kamp"
+                Padding="5,1,5,1"
+                FontSize="14"
+                Cursor="Hand"/>
+
+            <Button
+                Grid.Row="0"
                 Grid.Column="4"
-                Content="Start nade-practice"
+                Content="Start kniv"
+                Padding="5,1,5,1"
+                FontSize="14"
+                Cursor="Hand"/>
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                Content="Start kamp (Overtime)"
                 Padding="5,1,5,1"
                 FontSize="14" 
-                MaxHeight="27"
-                Command="{Binding StartNadePraticeCommand}"/>
+                Margin="0 10 0 0"
+                Cursor="Hand"/>
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="4"
+                Content="Skift side"
+                Padding="5,1,5,1"
+                FontSize="14" 
+                Margin="0 10 0 0"
+                Cursor="Hand"/>
+            
         </Grid>
 
-        <Rectangle Grid.Row="5" HorizontalAlignment="Stretch" Style="{StaticResource Separator}" Margin="0 20 0 20"/>
+        <StackPanel Grid.Row="5">
+            <TextBlock
+                Text="Generelle commands"
+                Foreground="White" 
+                FontSize="14"
+                Margin="0 35 0 0"/>
+            <Rectangle  HorizontalAlignment="Stretch" Fill="Gray" Height="1" Margin="0 0 0 20"/>
+        </StackPanel>
+
 
         <Grid Grid.Row="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="0">
@@ -149,18 +246,17 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <TextBlock Grid.Row="0" Foreground="White" Text="Skift map" Padding="5 0 5 0" FontSize="14"/>
+                <TextBlock Grid.Row="0" Foreground="White" Text="Skift map" Padding="3 0" FontSize="14"/>
 
                 <Rectangle Grid.Row="1" HorizontalAlignment="Stretch" Style="{StaticResource Separator}"/>
-
-                <!--<TextBlock Grid.Row="2" Text="Vælg map" Background="white" Padding="5 0 5 0" FontSize="14"/>-->
 
                 <ComboBox 
                     Grid.Row="2" 
                     ItemsSource="{Binding Maps}" 
                     SelectedItem="{Binding SwitchToMap}" 
                     Padding="7 2 7 2"
-                    Cursor="Hand">
+                    Cursor="Hand"
+                    Width="150">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" FontSize="14"/>
@@ -172,9 +268,44 @@
                     Grid.Row="3" Content="Skift" 
                     Padding="7 2 7 2" 
                     FontSize="14" 
-                    Margin="0 20 0 0"
+                    Margin="0 10 0 0"
+                    Cursor="Hand"
                     Command="{Binding SwitchMapCommand}"/>
             </Grid>
+
+            <StackPanel Grid.Column="2">
+                <TextBlock
+                Text="Send custom command"
+                Foreground="White" 
+                FontSize="14"
+                Margin="0 0 0 5"/>
+                <TextBox Margin="0 0 0 5"/>
+                <Button
+                    Grid.Row="3" Content="Send" 
+                    Padding="7 2 7 2" 
+                    FontSize="14"
+                    Cursor="Hand"/>
+            </StackPanel>
+            
         </Grid>
+
+        <StackPanel Grid.Row="7">
+            <TextBlock
+                Text="Andre commands"
+                Foreground="White" 
+                FontSize="14"
+                Margin="0 35 0 0"/>
+            <Rectangle  HorizontalAlignment="Stretch" Fill="Gray" Height="1" Margin="0 0 0 20"/>
+        </StackPanel>
+
+        <Button
+            Grid.Row="8"
+            HorizontalAlignment="Left"
+            Content="Start nade-practice"
+            Padding="5,1,5,1"
+            FontSize="14" 
+            Cursor="Hand"
+            Command="{Binding StartNadePraticeCommand}"/>
+
     </Grid>
 </UserControl>

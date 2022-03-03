@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HVKClassLibary.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -21,6 +22,15 @@ namespace HVKDesktopUI.Views
     /// </summary>
     public partial class ServerList : UserControl
     {
+        private Server _server;
+
+        public ServerList(Server server)
+        {
+            _server = server;
+        }
+
+        public ICommand NavigateToServerCommand { get; }
+
         public ServerList()
         {
             InitializeComponent();

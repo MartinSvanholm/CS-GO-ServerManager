@@ -17,7 +17,7 @@ namespace HVKDesktopUI.ViewModels
         {
             _server = server;
 
-            StartServerCommand = new StartServerCommand(_server);
+            StartServerCommand = new StartServerCommand(this);
             StartGameCommand = new StartGameCommand(_server);
             StartNadePraticeCommand = new StartNadePraticeCommand(_server);
             NavigateToServerCommand = new NavigateCommand<ServerViewModel>(navigationStore, () => new ServerViewModel(_server, navigationStore));
@@ -34,7 +34,7 @@ namespace HVKDesktopUI.ViewModels
 
         public ICommand SwitchMapCommand{ get; }
 
-        private Server _server;
+        public Server _server;
 
         public string ID => _server.Id;
 
@@ -59,8 +59,17 @@ namespace HVKDesktopUI.ViewModels
         }
 
         public List<Map> Maps => _server.Maps;
+        public bool IsOnline
+        {
+            get => _server.On;
+            set
+            {
+                _server.On = value;
+                OnPropertychanged(nameof(IsOnString));
+            }
+        }
 
-        public string On => GetStatus();
+        public string IsOnString => GetStatus();
 
         public string ControlButtonText => GetButtonText();
 

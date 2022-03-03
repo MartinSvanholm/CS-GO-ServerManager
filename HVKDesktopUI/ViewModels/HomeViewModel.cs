@@ -18,12 +18,17 @@ namespace HVKDesktopUI.ViewModels
 
         public ICommand LoginCommand { get; }
 
-        public Account Account { get; set; } = new();
+        
+        public Account Account
+        {
+            get => AccountService.Account;
+            set => AccountService.Account = value;
+        }
 
         public HomeViewModel(NavigationStore navigationStore)
         {
             NavigateToServerListCommand = new NavigateCommand<ServerListViewModel>(navigationStore, () => new ServerListViewModel(navigationStore));
-            LoginCommand = new LoginCommand(Account);
+            LoginCommand = new LoginCommand();
         }
     }
 }

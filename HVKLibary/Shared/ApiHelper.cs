@@ -12,8 +12,8 @@ namespace HVKClassLibary.Shared
     {
         public static HttpClient ApiClient { get; set; }
 
-        public static string Email { get; set; } = "";
-        public static string Password { get; set; } = "";
+        public static string Email { get; set; } = "ms@hobrovikings.dk";
+        public static string Password { get; set; } = "hobrovikings1212";
 
         public static void InitializeClient()
         {

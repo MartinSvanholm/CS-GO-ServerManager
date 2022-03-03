@@ -20,7 +20,28 @@
 
             <TextBlock Grid.Column="0" Text="Server liste" Style="{StaticResource ViewHeader}" Foreground="White" />
 
-            <Button Grid.Column="1" Content="Opdater liste" Padding="5,1,5,1" Command="{Binding NavigateToServerListCommand}"/>
+            <Button Grid.Column="1" FontSize="14" Content="Opdater liste" HorizontalAlignment="Left" VerticalAlignment="center" HorizontalContentAlignment="Left" Width="100" Height="34" Command="{Binding NavigateToServerListCommand}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="#3d3d3d"/>
+                        <Setter Property="Foreground" Value="white" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border Background="{TemplateBinding Background}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#5d5d5d"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
 
         <ListView 
@@ -59,7 +80,7 @@
                     <GridViewColumn Header="Status">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding On}"/>
+                                <TextBlock Text="{Binding IsOnString}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -67,14 +88,6 @@
                     <GridViewColumn Header="">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Button 
-                                    Style="{StaticResource ServerShowButton}"
-                                    Content="Vis" 
-                                    Command="{Binding NavigateToServerCommand}" 
-                                    BorderThickness="0"
-                                    Margin="0 0 0 0"
-                                    Padding="5 0 5 0"
-                                    />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
