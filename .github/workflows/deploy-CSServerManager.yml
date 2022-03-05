@@ -6,7 +6,7 @@ on:
       - "CSServerManager/v*"
 
 env:
-  PROJECT_PATH: HVKServerManager\HVKDesktopUI.csproj
+  PROJECT_PATH: HVKDesktopUI.csproj
 
 jobs:
   deploy:
