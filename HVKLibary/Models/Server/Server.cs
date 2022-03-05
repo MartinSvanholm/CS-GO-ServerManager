@@ -67,6 +67,15 @@ namespace HVKClassLibary.Models
             set { _on = value; }
         }
 
+        private bool isPaused = false;
+
+        public bool IsPaused
+        {
+            get { return isPaused; }
+            set { isPaused = value; }
+        }
+
+
         public List<Map> Maps { get; } = new List<Map> { 
             new Map("Inferno"),
             new Map("Mirage"),

@@ -6,6 +6,33 @@
              xmlns:viewmodels="clr-namespace:HVKDesktopUI.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:ServerListViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#3d3d3d"/>
+            <Setter Property="Foreground" Value="white" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Border.Effect>
+                                <DropShadowEffect Opacity="0.2"/>
+                            </Border.Effect>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#4d4d4d"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -20,28 +47,16 @@
 
             <TextBlock Grid.Column="0" Text="Server liste" Style="{StaticResource ViewHeader}" Foreground="White" />
 
-            <Button Grid.Column="1" FontSize="14" Content="Opdater liste" HorizontalAlignment="Left" VerticalAlignment="center" HorizontalContentAlignment="Left" Width="100" Height="34" Command="{Binding NavigateToServerListCommand}">
-                <Button.Style>
-                    <Style TargetType="{x:Type Button}">
-                        <Setter Property="Background" Value="#3d3d3d"/>
-                        <Setter Property="Foreground" Value="white" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type Button}">
-                                    <Border Background="{TemplateBinding Background}">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#5d5d5d"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
+            <Button 
+                Grid.Column="1" 
+                FontSize="14" 
+                Content="Opdater liste" 
+                HorizontalAlignment="Left" 
+                VerticalAlignment="center" 
+                HorizontalContentAlignment="Left" 
+                Width="100" Height="34" 
+                Command="{Binding NavigateToServerListCommand}" />
+
         </Grid>
 
         <ListView 

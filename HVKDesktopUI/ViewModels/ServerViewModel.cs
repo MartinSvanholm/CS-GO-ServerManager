@@ -1,5 +1,6 @@
 ﻿using HVKClassLibary.Models;
 using HVKDesktopUI.Commands;
+using HVKDesktopUI.Commands.ServerCommands;
 using HVKDesktopUI.Stores;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,15 @@ namespace HVKDesktopUI.ViewModels
         {
             _server = server;
 
+            NavigateToServerCommand = new NavigateCommand<ServerViewModel>(navigationStore, () => new ServerViewModel(_server, navigationStore));
+
             StartServerCommand = new StartServerCommand(this);
             StartGameCommand = new StartGameCommand(_server);
             StartNadePraticeCommand = new StartNadePraticeCommand(_server);
-            NavigateToServerCommand = new NavigateCommand<ServerViewModel>(navigationStore, () => new ServerViewModel(_server, navigationStore));
             SwitchMapCommand = new SwitchMapCommand(_server);
+            PauseGameCommand = new PauseGameCommand(_server);
+            StartKnifeCommand = new StartKnifeCommand(_server);
+            SwitchSidesCommands = new SwitchSidesCommand(_server);
         }
 
         public ICommand NavigateToServerCommand { get; }
@@ -33,6 +38,12 @@ namespace HVKDesktopUI.ViewModels
         public ICommand StartNadePraticeCommand { get; }
 
         public ICommand SwitchMapCommand{ get; }
+
+        public ICommand PauseGameCommand { get; }
+
+        public ICommand StartKnifeCommand { get; }
+
+        public ICommand SwitchSidesCommands { get; }
 
         public Server _server;
 

@@ -50,14 +50,17 @@
 
             <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItemClicked" />
 
+            <Setter Property="Cursor" Value="Hand" />
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListViewItem}">
-                        <Border Padding="{TemplateBinding Padding}"
-                    Background="{TemplateBinding Background}"
-                    BorderBrush="{TemplateBinding BorderBrush}"
-                    BorderThickness="{TemplateBinding BorderThickness}"
-                    SnapsToDevicePixels="true">
+                        <Border 
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="true">
                             <GridViewRowPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                       SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -70,14 +73,5 @@
             <Setter Property="Margin" Value="0 2 0 2"/>
             <Setter Property="Background" Value="#3A3A3A" />
         </Style>
-
-        <Style x:Key="ServerShowButton" TargetType="{x:Type Button}">
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#474747"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
     </Application.Resources>
 </Application>

@@ -22,14 +22,28 @@ namespace HVKDesktopUI.Commands
 
         public async override void Execute(object parameter)
         {
-            try
+            if (_server.On)
             {
-                await ServerProcessor.SendCommand(_server.Id, $"map de_{_server.SwitchToMap.Name.ToLower()}");
-                MessageBox.Show($"Skifter map til {_server.SwitchToMap.Name.ToLower()}");
-            }
-            catch (HttpRequestException e)
+                if (_server.SwitchToMap != null)
+                {
+                    try
+                    {
+                        await ServerProcessor.SendCommand(_server.Id, $"map de_{_server.SwitchToMap.Name.ToLower()}");
+                        MessageBox.Show($"Skifter map til {_server.SwitchToMap.Name.ToLower()}");
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        MessageBox.Show($"Error: {e.Message}");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Vælg et map først.");
+                }
+            } 
+            else
             {
-                MessageBox.Show($"Error: {e.Message}");
+                MessageBox.Show("Server skal være tændt.");
             }
         }
     }
