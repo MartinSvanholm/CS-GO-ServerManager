@@ -42,17 +42,17 @@ namespace HVKDesktopUI.ViewModels
             try
             {
                 ServerList = await ServerProcessor.LoadServers();
+
+                foreach (Server server in ServerList)
+                {
+                    _servers.Add(new ServerViewModel(server, _navigationStore));
+                }
             }
             catch (HttpRequestException e)
             {
                 MessageBox.Show($"Error: {e.Message}");
                 object test = new object();
                 NavigateToHomepage.Execute(test);
-            }
-
-            foreach (Server server in ServerList)
-            {
-                _servers.Add(new ServerViewModel(server, _navigationStore));
             }
         }
     }

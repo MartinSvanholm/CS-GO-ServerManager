@@ -1,7 +1,6 @@
 ﻿<Application x:Class="HVKDesktopUI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:wpfEx="clr-namespace:WpfExtensions">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
         <Style TargetType="TextBlock" x:Key="ViewHeader">
             <Setter Property="FontSize" Value="24" />

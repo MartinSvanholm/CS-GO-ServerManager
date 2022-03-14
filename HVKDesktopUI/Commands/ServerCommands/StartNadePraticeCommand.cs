@@ -20,11 +20,11 @@ namespace HVKDesktopUI.Commands
         }
         public async override void Execute(object parameter)
         {
-            if (_server.On)
+            if (_server.IsOn)
             {
                 try
                 {
-                    await ServerProcessor.SendCommand(_server.Id, "exec train");
+                    await _server.SendCommand("exec train");
                     MessageBox.Show("Nade practice startet.");
                 }
                 catch (HttpRequestException e)

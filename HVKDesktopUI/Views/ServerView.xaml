@@ -88,7 +88,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
     </UserControl.Resources>
     
     <Grid>
@@ -113,17 +112,17 @@
 
             <TextBlock 
                 Grid.Column="0"
-                Text="{Binding Name}" 
+                Text="{Binding ServerName}" 
                 Foreground="White" 
                 Style="{StaticResource ViewHeader}"/>
 
             <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <TextBlock Text="Server " Foreground="White" FontSize="14" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding IsOnString}" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding ServerStatus}" Foreground="White" FontSize="14" VerticalAlignment="Center"/>
                 <TextBlock Text=" ... " Foreground="White" FontSize="14" VerticalAlignment="Center"  Margin="0 0 10 0"/>
                 <ToggleButton
-                    Grid.Row="0" 
-                    Content="{Binding ControlButtonText}" 
+                    Name="switch"
+                    Grid.Row="0"
                     FontSize="14"
                     Command="{Binding StartServerCommand}"
                     VerticalAlignment="Center" />
@@ -141,7 +140,7 @@
 
             <TextBlock
                 Grid.Column="0"
-                Text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vitae lorem egestas, tempus eros in, semper ex. Nullam tellus metus, ultrices non nulla at, condimentum posuere mauris. Morbi eget posuere odio, nec rhoncus justo. Pellentesque at malesuada nunc, quis cursus massa. Cras interdum mi vitae erat mattis, at pellentesque lorem."
+                Text="Her kan du styre din server, tænd serveren for at komme igang."
                 Foreground="White"
                 TextWrapping="Wrap"
                 FontSize="14" 
@@ -169,7 +168,7 @@
                     Background="Transparent"
                     BorderBrush="Transparent"
                     Foreground="White"
-                    Text="{Binding ConnectIP, Mode=OneWay}" 
+                    Text="{Binding ConnectionString, Mode=OneWay}" 
                     BorderThickness="0"
                     FontSize="14" SelectionTextBrush="{x:Null}" Cursor="IBeam"/>
                 </Grid>
@@ -238,7 +237,8 @@
                 FontSize="14" 
                 Margin="0 30 0 0"
                 Width="150"
-                Cursor="Hand">
+                Cursor="Hand"
+                Command="{Binding StartOvertimeGameCommand}">
             </Button>
 
             <Button
@@ -284,16 +284,17 @@
 
                 <ComboBox 
                     Grid.Row="2" 
-                    ItemsSource="{Binding Maps}" 
-                    SelectedItem="{Binding SwitchToMap}" 
+                    SelectedItem="{Binding SelectedMap}" 
                     Padding="7 2 7 2"
                     Cursor="Hand"
                     Width="150">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Name}" FontSize="14"/>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
+                    <ComboBoxItem Content="Inferno"/>
+                    <ComboBoxItem Content="Mirage"/>
+                    <ComboBoxItem Content="Dust 2"/>
+                    <ComboBoxItem Content="Nuke"/>
+                    <ComboBoxItem Content="Vertigo"/>
+                    <ComboBoxItem Content="Ancient"/>
+                    <ComboBoxItem Content="Overpass"/>
                 </ComboBox>
 
                 <Button
@@ -311,12 +312,17 @@
                 Foreground="White" 
                 FontSize="14"
                 Margin="0 0 0 5"/>
-                <TextBox Margin="0 0 0 5"/>
+                
+                <TextBox 
+                    Margin="0 0 0 5"
+                    Text="{Binding CustomCommanLine}"/>
+                
                 <Button
                     Grid.Row="3" Content="Send" 
                     Padding="7 2 7 2" 
                     FontSize="14"
-                    Cursor="Hand"/>
+                    Cursor="Hand"
+                    Command="{Binding CustomCommandSend}"/>
             </StackPanel>
         </Grid>
 

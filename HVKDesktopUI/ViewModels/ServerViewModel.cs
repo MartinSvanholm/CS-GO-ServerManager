@@ -1,4 +1,5 @@
 ﻿using HVKClassLibary.Models;
+using HVKClassLibary.Shared;
 using HVKDesktopUI.Commands;
 using HVKDesktopUI.Commands.ServerCommands;
 using HVKDesktopUI.Stores;
@@ -8,6 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace HVKDesktopUI.ViewModels
@@ -16,17 +18,20 @@ namespace HVKDesktopUI.ViewModels
     {
         public ServerViewModel(Server server, NavigationStore navigationStore)
         {
-            _server = server;
+            this.server = server;
+            this.server.ServerStatusChanged += OnServerStatusChanged;
 
-            NavigateToServerCommand = new NavigateCommand<ServerViewModel>(navigationStore, () => new ServerViewModel(_server, navigationStore));
+            NavigateToServerCommand = new NavigateCommand<ServerViewModel>(navigationStore, () => new ServerViewModel(server, navigationStore));
 
-            StartServerCommand = new StartServerCommand(this);
-            StartGameCommand = new StartGameCommand(_server);
-            StartNadePraticeCommand = new StartNadePraticeCommand(_server);
-            SwitchMapCommand = new SwitchMapCommand(_server);
-            PauseGameCommand = new PauseGameCommand(_server);
-            StartKnifeCommand = new StartKnifeCommand(_server);
-            SwitchSidesCommands = new SwitchSidesCommand(_server);
+            StartServerCommand = new StartServerCommand(server);
+            StartGameCommand = new StartGameCommand(server);
+            StartOvertimeGameCommand = new StartOvertimeGameCommand(server);
+            StartNadePraticeCommand = new StartNadePraticeCommand(server);
+            SwitchMapCommand = new SwitchMapCommand(server, SelectedMap);
+            PauseGameCommand = new PauseGameCommand(server);
+            StartKnifeCommand = new StartKnifeCommand(server);
+            SwitchSidesCommands = new SwitchSidesCommand(server);
+            CustomCommandSend = new CustomCommand(server, CustomCommanLine);
         }
 
         public ICommand NavigateToServerCommand { get; }
@@ -34,6 +39,8 @@ namespace HVKDesktopUI.ViewModels
         public ICommand StartServerCommand { get; }
 
         public ICommand StartGameCommand { get; }
+
+        public ICommand StartOvertimeGameCommand { get; }
 
         public ICommand StartNadePraticeCommand { get; }
 
@@ -45,69 +52,38 @@ namespace HVKDesktopUI.ViewModels
 
         public ICommand SwitchSidesCommands { get; }
 
-        public Server _server;
+        public ICommand CustomCommandSend { get; }
 
-        public string ID => _server.Id;
+        public Server server { get; set; }
 
-        public string Name => _server.Name;
+        public string ServerName { get => server.Name; }
 
-        public string PlayersOnline => _server.Players_Online.ToString();
+        public string ServerStatus { get => server.ServerStatus; }
 
-        private string _connectIP { get; set; }
-        public string ConnectIP
+        public int PlayersOnline { get => server.PlayersOnline; }
+
+        public string ConnectionString { get => server.ConnectionString; }
+
+        private string selectedMap;
+        public string SelectedMap
         {
-            get => $"connect {_server.Ip}:{_server.Ports.Game}{GetPassword()}";
-            set { _connectIP = value; }
-        }
-
-        public Map SwitchToMap
-        {
-            get => _server.SwitchToMap;
+            get { return selectedMap; }
             set
             {
-                _server.SwitchToMap = value;
+                if (value == "Dust 2")
+                {
+                    selectedMap = "dust2";
+                }
+                else
+                    selectedMap = value;
             }
         }
+        public string CustomCommanLine { get; set; }
 
-        public List<Map> Maps => _server.Maps;
-        public bool IsOnline
+        private async void OnServerStatusChanged(object sender, EventArgs e)
         {
-            get => _server.On;
-            set
-            {
-                _server.On = value;
-                OnPropertychanged(nameof(IsOnString));
-            }
-        }
-
-        public string IsOnString => GetStatus();
-
-        public string ControlButtonText => GetButtonText();
-
-        public string GetPassword()
-        {
-            if (_server.Csgo_Settings.Password != "")
-            {
-                return $"; password {_server.Csgo_Settings.Password}";
-            }
-            else
-                return string.Empty;
-        }
-
-        public string GetStatus()
-        {
-            if (_server.On == true)
-                return "Online";
-            else
-                return "Offline";
-        }
-
-        public string GetButtonText()
-        {
-            if (_server.On == true)
-                return "Sluk server";
-            else
-                return "Start server";
+            server = await ServerProcessor.LoadServer(server.Id);
+            OnPropertychanged(nameof(server));
         }
     }
 }

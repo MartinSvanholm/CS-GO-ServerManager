@@ -3,98 +3,122 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Timers;
 
 namespace HVKClassLibary.Models
 {
     public class Server
     {
-        public Server(string name)
+        public Server(string id, string name, string connectionString, int playersOnline, string serverSatus, bool isOn)
         {
+            Id = id;
             Name = name;
+            ConnectionString = connectionString;
+            this.serverSatus = serverSatus;
+            PlayersOnline = playersOnline;
+            IsOn = isOn;
+
+            Timer = new System.Timers.Timer(30000);
+            Timer.Elapsed += OnTimedEvent;
         }
 
-        private string _id;
+        public event EventHandler ServerStatusChanged;
 
-        public string Id
+        private static System.Timers.Timer Timer;
+
+        public string Id { get; }
+
+        public string Name { get; }
+
+        public string ConnectionString { get; }
+
+        private string serverSatus;
+        public string ServerStatus
         {
-            get { return _id; }
-            set { _id = value; }
-        }
-
-        private Ports _ports;
-        public Ports Ports
-        {
-            get { return _ports; }
-            set { _ports = value; }
-        }
-
-        private csgo_settings _csgo_Settings;
-                
-        public csgo_settings Csgo_Settings
-        {
-            get { return _csgo_Settings; }
-            set { _csgo_Settings = value; }
-        }
-
-        private string _name { get; set; }
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-
-        private int _playersOnline;
-        public int Players_Online
-        {
-            get { return _playersOnline; }
-            set { _playersOnline = value; }
-        }
-
-        private string _ip;
-        public string Ip
-        {
-            get { return _ip; }
-            set { _ip = value; }
-        }
-
-        private bool _on;
-
-        public bool On
-        {
-            get { return _on; }
-            set { _on = value; }
-        }
-
-        private bool isPaused = false;
-
-        public bool IsPaused
-        {
-            get { return isPaused; }
-            set { isPaused = value; }
-        }
-
-
-        public List<Map> Maps { get; } = new List<Map> { 
-            new Map("Inferno"),
-            new Map("Mirage"),
-            new Map("Overpass"),
-            new Map("Nuke"),
-            new Map("Vertigo"),
-            new Map("Dust 2"),
-            new Map("Ancient") };
-
-        private Map _switchToMap { get; set; }
-
-        public Map SwitchToMap
-        {
-            get => _switchToMap;
+            get { return serverSatus; }
             set
             {
-                _switchToMap = value;
-                Trace.WriteLine($"map de_{_switchToMap.Name.ToLower()}");
+                if (value == "Online" || value == "Offline" || value == "Booting")
+                {
+                    serverSatus = value;
+                }
+                else
+                    throw new ArgumentException($"Server status cannot be {value}");
             }
+        }
+        
+        public int PlayersOnline { get; }
+
+        private bool isOn;
+        public bool IsOn
+        {
+            get => isOn;
+            set => isOn = value;
+        }
+
+        private bool isMatchPaused;
+        public bool IsMatchPaused
+        {
+            get { return isMatchPaused; }
+            set
+            {
+                if (IsOn == true)
+                    isMatchPaused = value;
+                else
+                    throw new ArgumentException("Kamp kan ikke pauses når serveren er offline");
+            }
+        }
+
+        public async Task<string> OnOffToggleServer()
+        {
+            if (IsOn == true)
+            {
+                try
+                {
+                    await ServerProcessor.ServerSpecificAction(Id, "stop");
+                    ServerStatusChanged.Invoke(this, EventArgs.Empty);
+                    return "Server stoppet.";
+                }
+                catch (HttpRequestException)
+                {
+                    throw;
+                }
+            }
+            else
+            {
+                try
+                {
+                    await ServerProcessor.ServerSpecificAction(Id, "start");
+                    ServerStatusChanged.Invoke(this, EventArgs.Empty);
+                    Timer.Start();
+                    return "Server startet.";
+                }
+                catch (HttpRequestException)
+                {
+                    throw;
+                }
+            }
+        }
+
+        public async Task SendCommand(string command)
+        {
+            try
+            {
+                await ServerProcessor.SendCommand(Id, command);
+            }
+            catch (HttpRequestException)
+            {
+                throw;
+            }
+        }
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            ServerStatusChanged.Invoke(this, EventArgs.Empty);
         }
     }
 }

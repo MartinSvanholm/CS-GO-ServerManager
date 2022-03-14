@@ -21,11 +21,11 @@ namespace HVKDesktopUI.Commands.ServerCommands
 
         public async override void Execute(object parameter)
         {
-            if (_server.On)
+            if (_server.IsOn)
             {
                 try
                 {
-                    await ServerProcessor.SendCommand(_server.Id, "exec knife");
+                    await _server.SendCommand("exec knife");
                     MessageBox.Show("Knife startet.");
                 }
                 catch (HttpRequestException e)

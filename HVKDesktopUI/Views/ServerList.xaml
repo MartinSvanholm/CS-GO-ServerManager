@@ -71,7 +71,7 @@
                     <GridViewColumn Header="Navn">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding ServerName}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -79,7 +79,7 @@
                     <GridViewColumn Header="IP">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding ConnectIP}"/>
+                                <TextBlock Text="{Binding ConnectionString}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -95,7 +95,7 @@
                     <GridViewColumn Header="Status">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding IsOnString}"/>
+                                <TextBlock Text="{Binding ServerStatus}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

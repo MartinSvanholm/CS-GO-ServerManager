@@ -21,11 +21,11 @@ namespace HVKDesktopUI.Commands
 
         public async override void Execute(object parameter)
         {
-            if (_server.On)
+            if (_server.IsOn)
             {
                 try
                 {
-                    await ServerProcessor.SendCommand(_server.Id, "exec esportliga_start");
+                    await _server.SendCommand("exec esportliga_start");
                     MessageBox.Show("Kamp startet.");
                 }
                 catch (HttpRequestException e)

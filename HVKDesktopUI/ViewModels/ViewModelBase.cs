@@ -9,7 +9,7 @@ namespace HVKDesktopUI.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertychanged(string propertyName)
         {

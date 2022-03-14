@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using HVKClassLibary.Models;
 using System.Diagnostics;
+using HVKClassLibary.Models.DTO_s.Server_DTO;
 
 namespace HVKClassLibary.Shared
 {
     public static class ServerProcessor
     {
+        public static async Task<Server> LoadServer(string id)
+        {
+            throw new NotImplementedException();
+        }
+
         public static async Task<List<Server>> LoadServers()
         {
             string url = ApiHelper.ApiClient.BaseAddress + "/api/0.1/game-servers";
@@ -19,15 +25,27 @@ namespace HVKClassLibary.Shared
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    List<Server> servers = await response.Content.ReadAsAsync<List<Server>>();
+                    try
+                    {
+                        List<ServerDTO> servers = new List<ServerDTO>();
+                        List<Server> _servers = new List<Server>();
 
-                    //Trace.WriteLine("");
-                    //foreach (Server server in servers)
-                    //{
-                    //    Trace.WriteLine(server.Name);
-                    //}
-                    //Trace.WriteLine("");
-                    return servers;
+                        servers = await response.Content.ReadAsAsync<List<ServerDTO>>();
+
+                        foreach (ServerDTO serverDTO in servers)
+                        {
+                            _servers.Add(new Server(
+                                serverDTO.id, serverDTO.name, $"connect {serverDTO.ip}", serverDTO.players_online, ServerStatusConverter(serverDTO), serverDTO.on));
+                        }
+                        return _servers;
+                    }
+                    catch (Exception e)
+                    {
+                        Trace.WriteLine("");
+                        Trace.WriteLine(e.Message);
+                        Trace.WriteLine("");
+                    }
+                    return null;
                 }
                 else
                 {
@@ -74,6 +92,16 @@ namespace HVKClassLibary.Shared
                     throw new HttpRequestException(response.ReasonPhrase);
                 }
             }
+        }
+
+        private static string ServerStatusConverter(ServerDTO serverDTO)
+        {
+            if (serverDTO.booting == true)
+                return "Booting";
+            else if (serverDTO.on == true)
+                return "Online";
+            else
+                return "Offline";
         }
     }
 }

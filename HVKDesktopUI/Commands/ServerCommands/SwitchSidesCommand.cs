@@ -21,11 +21,11 @@ namespace HVKDesktopUI.Commands.ServerCommands
 
         public async override void Execute(object parameter)
         {
-            if (_server.On)
+            if (_server.IsOn)
             {
                 try
                 {
-                    await ServerProcessor.SendCommand(_server.Id, "mp_swapteams");
+                    await _server.SendCommand("mp_swapteams");
                     MessageBox.Show("Sider skiftet.");
                 }
                 catch (HttpRequestException e)

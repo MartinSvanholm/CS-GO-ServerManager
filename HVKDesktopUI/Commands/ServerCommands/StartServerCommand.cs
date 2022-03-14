@@ -14,42 +14,23 @@ namespace HVKDesktopUI.Commands
 {
     public class StartServerCommand : CommandBase
     {
-        private ServerViewModel ServerViewModel;
+        private readonly Server _server;
 
-        public StartServerCommand(ServerViewModel serverViewModel)
+        public StartServerCommand(Server server)
         {
-            ServerViewModel = serverViewModel;
+            _server = server;
         }
-
+       
         public async override void Execute(object parameter)
         {
-            if (ServerViewModel._server.On)
+            try
             {
-                Trace.WriteLine("Server on");
-                try
-                {
-                    await ServerProcessor.ServerSpecificAction(ServerViewModel._server.Id, "stop");
-                    MessageBox.Show("Server stoppet");
-                    ServerViewModel.IsOnline = false;
-                }
-                catch (HttpRequestException e)
-                {
-                    MessageBox.Show($"Error: {e.Message}");
-                }
+                await _server.OnOffToggleServer();
+                MessageBox.Show("Server stoppet");
             }
-            else
+            catch (HttpRequestException e)
             {
-                Trace.WriteLine("Server off");
-                try
-                {
-                    await ServerProcessor.ServerSpecificAction(ServerViewModel._server.Id, "start");
-                    MessageBox.Show("Server starter, der kan gå op til 60 sekunder før du kan joine serveren");
-                    ServerViewModel.IsOnline = true;
-                }
-                catch (HttpRequestException e)
-                {
-                    MessageBox.Show($"Error: {e.Message}");
-                }
+                MessageBox.Show($"Error: {e.Message}");
             }
         }
     }

@@ -11,15 +11,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
-    <PackageReference Include="syncfusion.ui.wpf.net" Version="19.4.0.38" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\HVKLibary\HVKClassLibary.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
