@@ -13,22 +13,14 @@ namespace HVKClassLibary.Models
 {
     public class Server
     {
-        public Server(string id, string name, string connectionString, int playersOnline, string serverSatus, bool isOn)
+        public Server(string id, string name, string connectionString, int playersOnline, string serverSatus)
         {
             Id = id;
             Name = name;
             ConnectionString = connectionString;
             this.serverSatus = serverSatus;
             PlayersOnline = playersOnline;
-            IsOn = isOn;
-
-            Timer = new System.Timers.Timer(30000);
-            Timer.Elapsed += OnTimedEvent;
         }
-
-        public event EventHandler ServerStatusChanged;
-
-        private static System.Timers.Timer Timer;
 
         public string Id { get; }
 
@@ -53,20 +45,13 @@ namespace HVKClassLibary.Models
         
         public int PlayersOnline { get; }
 
-        private bool isOn;
-        public bool IsOn
-        {
-            get => isOn;
-            set => isOn = value;
-        }
-
         private bool isMatchPaused;
         public bool IsMatchPaused
         {
             get { return isMatchPaused; }
             set
             {
-                if (IsOn == true)
+                if (ServerStatusToIsOnConverter() == true)
                     isMatchPaused = value;
                 else
                     throw new ArgumentException("Kamp kan ikke pauses når serveren er offline");
@@ -75,12 +60,12 @@ namespace HVKClassLibary.Models
 
         public async Task<string> OnOffToggleServer()
         {
-            if (IsOn == true)
+            if (ServerStatusToIsOnConverter() == true)
             {
                 try
                 {
                     await ServerProcessor.ServerSpecificAction(Id, "stop");
-                    ServerStatusChanged.Invoke(this, EventArgs.Empty);
+                    ServerStatus = "Offline";
                     return "Server stoppet.";
                 }
                 catch (HttpRequestException)
@@ -93,8 +78,7 @@ namespace HVKClassLibary.Models
                 try
                 {
                     await ServerProcessor.ServerSpecificAction(Id, "start");
-                    ServerStatusChanged.Invoke(this, EventArgs.Empty);
-                    Timer.Start();
+                    ServerStatus = "Booting";
                     return "Server startet.";
                 }
                 catch (HttpRequestException)
@@ -116,9 +100,19 @@ namespace HVKClassLibary.Models
             }
         }
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private bool ServerStatusToIsOnConverter()
         {
-            ServerStatusChanged.Invoke(this, EventArgs.Empty);
+            switch (ServerStatus)
+            {
+                case "Booting":
+                    return false;
+                case "Online":
+                    return true;
+                case "Offline":
+                    return false;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(ServerStatus));
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using HVKClassLibary.Models;
 using HVKClassLibary.Shared;
+using HVKDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,32 +11,23 @@ using System.Windows;
 
 namespace HVKDesktopUI.Commands.ServerCommands
 {
-    public class StartOvertimeGameCommand : CommandBase
+    public class StartOvertimeGameCommand : ServerCommandBase
     {
-        private readonly Server _server;
-
-        public StartOvertimeGameCommand(Server server)
+        public StartOvertimeGameCommand(ServerViewModel serverViewModel) : base(serverViewModel)
         {
-            _server = server;
+
         }
 
         public async override void Execute(object parameter)
         {
-            if (_server.IsOn)
+            try
             {
-                try
-                {
-                    await _server.SendCommand("exec esportliga_start_med_overtime");
-                    MessageBox.Show("Kamp startet med overtime startet.");
-                }
-                catch (HttpRequestException e)
-                {
-                    MessageBox.Show($"Error: {e.Message}.");
-                }
+                await serverViewModel.Server.SendCommand("exec esportliga_start_med_overtime");
+                MessageBox.Show("Kamp startet med overtime startet.");
             }
-            else
+            catch (HttpRequestException e)
             {
-                MessageBox.Show("Server skal være tændt.");
+                MessageBox.Show($"Error: {e.Message}.");
             }
         }
     }

@@ -26,7 +26,7 @@ namespace HVKDesktopUI.ViewModels
 
         private readonly NavigationStore _navigationStore;
 
-        private List<Server> ServerList = new List<Server>();
+        private List<Server> ServerList = new();
 
         public ServerListViewModel(NavigationStore navigationStore)
         {
@@ -51,8 +51,7 @@ namespace HVKDesktopUI.ViewModels
             catch (HttpRequestException e)
             {
                 MessageBox.Show($"Error: {e.Message}");
-                object test = new object();
-                NavigateToHomepage.Execute(test);
+                NavigateToHomepage.Execute(this);
             }
         }
     }

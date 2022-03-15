@@ -26,7 +26,7 @@ namespace HVKDesktopUI
         {
             ApiHelper.InitializeClient();
 
-            NavigationStore navigationStore = new NavigationStore();
+            NavigationStore navigationStore = new();
             navigationStore.CurrentViewModel = new LayoutViewModel(new NavigationBarViewModel(navigationStore), () => new HomeViewModel(navigationStore));
 
             MainWindow = new MainWindow()

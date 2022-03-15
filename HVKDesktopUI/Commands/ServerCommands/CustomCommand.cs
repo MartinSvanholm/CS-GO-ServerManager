@@ -1,5 +1,6 @@
 ﻿using HVKClassLibary.Models;
 using HVKClassLibary.Shared;
+using HVKDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,42 +12,33 @@ using System.Windows;
 
 namespace HVKDesktopUI.Commands.ServerCommands
 {
-    public class CustomCommand : CommandBase
+    public class CustomCommand : ServerCommandBase
     {
-        public CustomCommand(Server server, string command)
+        public CustomCommand(ServerViewModel serverViewModel, string command) : base(serverViewModel)
         {
-            _server = server;
-            _command = command;
+            this.command = command;
         }
 
-        private readonly Server _server;
-        private readonly string _command;
+        private readonly string command;
 
         public async override void Execute(object parameter)
         {
-            if (_server.IsOn)
+            Trace.WriteLine(command);
+            if (command != null && command != "")
             {
-                Trace.WriteLine(_command);
-                if (_command != null && _command != "")
+                try
                 {
-                    try
-                    {
-                        await _server.SendCommand(_command);
-                        MessageBox.Show("Command udført.");
-                    }
-                    catch (HttpRequestException e)
-                    {
-                        MessageBox.Show($"Error: {e.Message}.");
-                    }
+                    await serverViewModel.Server.SendCommand(command);
+                    MessageBox.Show("Command udført.");
                 }
-                else
+                catch (HttpRequestException e)
                 {
-                    MessageBox.Show("Skriv en command først");
+                    MessageBox.Show($"Error: {e.Message}.");
                 }
             }
             else
             {
-                MessageBox.Show("Server skal være tændt.");
+                MessageBox.Show("Skriv en command først");
             }
         }
     }

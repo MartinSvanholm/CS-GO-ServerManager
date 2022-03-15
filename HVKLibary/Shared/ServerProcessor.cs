@@ -12,9 +12,28 @@ namespace HVKClassLibary.Shared
 {
     public static class ServerProcessor
     {
-        public static async Task<Server> LoadServer(string id)
+        public static async Task<string> CheckServerStatus(string id)
         {
-            throw new NotImplementedException();
+            string url = ApiHelper.ApiClient.BaseAddress + $"/api/0.1/game-servers/{id}";
+
+            using (HttpResponseMessage response = await ApiHelper.ApiClient.GetAsync(url))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<ServerDTO>();
+
+                    if (result.booting)
+                        return "Booting";
+                    else if (result.on)
+                        return "Online";
+                    else
+                        return "Offline";
+                }
+                else
+                {
+                    throw new HttpRequestException(response.ReasonPhrase);
+                }
+            }
         }
 
         public static async Task<List<Server>> LoadServers()
@@ -27,15 +46,20 @@ namespace HVKClassLibary.Shared
                 {
                     try
                     {
-                        List<ServerDTO> servers = new List<ServerDTO>();
-                        List<Server> _servers = new List<Server>();
+                        List<ServerDTO> servers = new();
+                        List<Server> _servers = new();
 
                         servers = await response.Content.ReadAsAsync<List<ServerDTO>>();
 
                         foreach (ServerDTO serverDTO in servers)
                         {
                             _servers.Add(new Server(
-                                serverDTO.id, serverDTO.name, $"connect {serverDTO.ip}", serverDTO.players_online, ServerStatusConverter(serverDTO), serverDTO.on));
+                                serverDTO.id, 
+                                serverDTO.name, 
+                                $"connect {serverDTO.ip}", 
+                                serverDTO.players_online, 
+                                ServerStatusConverter(serverDTO)
+                            ));
                         }
                         return _servers;
                     }

@@ -18,20 +18,19 @@ namespace HVKDesktopUI.ViewModels
     {
         public ServerViewModel(Server server, NavigationStore navigationStore)
         {
-            this.server = server;
-            this.server.ServerStatusChanged += OnServerStatusChanged;
+            this.Server = server;
 
             NavigateToServerCommand = new NavigateCommand<ServerViewModel>(navigationStore, () => new ServerViewModel(server, navigationStore));
 
-            StartServerCommand = new StartServerCommand(server);
-            StartGameCommand = new StartGameCommand(server);
-            StartOvertimeGameCommand = new StartOvertimeGameCommand(server);
-            StartNadePraticeCommand = new StartNadePraticeCommand(server);
-            SwitchMapCommand = new SwitchMapCommand(server, SelectedMap);
-            PauseGameCommand = new PauseGameCommand(server);
-            StartKnifeCommand = new StartKnifeCommand(server);
-            SwitchSidesCommands = new SwitchSidesCommand(server);
-            CustomCommandSend = new CustomCommand(server, CustomCommanLine);
+            StartServerCommand = new StartServerCommand(this);
+            StartGameCommand = new StartGameCommand(this);
+            StartOvertimeGameCommand = new StartOvertimeGameCommand(this);
+            StartNadePraticeCommand = new StartNadePraticeCommand(this);
+            SwitchMapCommand = new SwitchMapCommand(this, SelectedMap);
+            PauseGameCommand = new PauseGameCommand(this);
+            StartKnifeCommand = new StartKnifeCommand(this);
+            SwitchSidesCommands = new SwitchSidesCommand(this);
+            CustomCommandSend = new CustomCommand(this, CustomCommanLine);
         }
 
         public ICommand NavigateToServerCommand { get; }
@@ -54,15 +53,23 @@ namespace HVKDesktopUI.ViewModels
 
         public ICommand CustomCommandSend { get; }
 
-        public Server server { get; set; }
+        public Server Server { get; set; }
 
-        public string ServerName { get => server.Name; }
+        public string ServerName { get => Server.Name; }
 
-        public string ServerStatus { get => server.ServerStatus; }
+        public string ServerStatus
+        {
+            get => Server.ServerStatus;
+            set
+            {
+                Server.ServerStatus = value;
+                OnPropertychanged(nameof(ServerStatus));
+            }
+        }
 
-        public int PlayersOnline { get => server.PlayersOnline; }
+        public int PlayersOnline { get => Server.PlayersOnline; }
 
-        public string ConnectionString { get => server.ConnectionString; }
+        public string ConnectionString { get => Server.ConnectionString; }
 
         private string selectedMap;
         public string SelectedMap
@@ -78,12 +85,18 @@ namespace HVKDesktopUI.ViewModels
                     selectedMap = value;
             }
         }
-        public string CustomCommanLine { get; set; }
 
-        private async void OnServerStatusChanged(object sender, EventArgs e)
+        public bool IsMatchPaused
         {
-            server = await ServerProcessor.LoadServer(server.Id);
-            OnPropertychanged(nameof(server));
+            get { return Server.IsMatchPaused; }
+            set
+            {
+                Server.IsMatchPaused = value;
+                OnPropertychanged(nameof(IsMatchPaused));
+            }
         }
+
+
+        public string CustomCommanLine { get; set; }
     }
 }

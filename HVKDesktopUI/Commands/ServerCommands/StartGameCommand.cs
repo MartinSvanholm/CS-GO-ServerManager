@@ -1,7 +1,10 @@
 ﻿using HVKClassLibary.Models;
 using HVKClassLibary.Shared;
+using HVKDesktopUI.Commands.ServerCommands;
+using HVKDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -10,32 +13,23 @@ using System.Windows;
 
 namespace HVKDesktopUI.Commands
 {
-    public class StartGameCommand : CommandBase
+    public class StartGameCommand : ServerCommandBase
     {
-        private readonly Server _server;
-
-        public StartGameCommand(Server server)
+        public StartGameCommand(ServerViewModel serverViewModel) : base (serverViewModel)
         {
-            _server = server;
+
         }
 
         public async override void Execute(object parameter)
         {
-            if (_server.IsOn)
+            try
             {
-                try
-                {
-                    await _server.SendCommand("exec esportliga_start");
-                    MessageBox.Show("Kamp startet.");
-                }
-                catch (HttpRequestException e)
-                {
-                    MessageBox.Show($"Error: {e.Message}.");
-                }
+                await serverViewModel.Server.SendCommand("exec esportliga_start");
+                MessageBox.Show("Kamp startet.");
             }
-            else
+            catch (HttpRequestException e)
             {
-                MessageBox.Show("Server skal være tændt.");
+                MessageBox.Show($"Error: {e.Message}.");
             }
         }
     }
