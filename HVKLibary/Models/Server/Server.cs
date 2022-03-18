@@ -64,7 +64,7 @@ namespace HVKClassLibary.Models
             {
                 try
                 {
-                    await ServerProcessor.ServerSpecificAction(Id, "stop");
+                    await ServerProcessor.ServerAction(Id, "stop");
                     ServerStatus = "Offline";
                     return "Server stoppet.";
                 }
@@ -77,7 +77,7 @@ namespace HVKClassLibary.Models
             {
                 try
                 {
-                    await ServerProcessor.ServerSpecificAction(Id, "start");
+                    await ServerProcessor.ServerAction(Id, "start");
                     ServerStatus = "Booting";
                     return "Server startet.";
                 }

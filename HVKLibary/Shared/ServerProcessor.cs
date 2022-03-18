@@ -78,7 +78,7 @@ namespace HVKClassLibary.Shared
             }
         }
 
-        public static async Task ServerSpecificAction(string id, string parameter)
+        public static async Task ServerAction(string id, string parameter)
         {
             string url = ApiHelper.ApiClient.BaseAddress + $"/api/0.1/game-servers/{id}/{parameter}";
 
