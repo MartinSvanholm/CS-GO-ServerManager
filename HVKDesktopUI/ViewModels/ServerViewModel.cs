@@ -26,11 +26,11 @@ namespace HVKDesktopUI.ViewModels
             StartGameCommand = new StartGameCommand(this);
             StartOvertimeGameCommand = new StartOvertimeGameCommand(this);
             StartNadePraticeCommand = new StartNadePraticeCommand(this);
-            SwitchMapCommand = new SwitchMapCommand(this, SelectedMap);
+            SwitchMapCommand = new SwitchMapCommand(this);
             PauseGameCommand = new PauseGameCommand(this);
             StartKnifeCommand = new StartKnifeCommand(this);
             SwitchSidesCommands = new SwitchSidesCommand(this);
-            CustomCommandSend = new CustomCommand(this, CustomCommanLine);
+            CustomCommandSend = new CustomCommand(this);
         }
 
         public ICommand NavigateToServerCommand { get; }
@@ -96,7 +96,12 @@ namespace HVKDesktopUI.ViewModels
             }
         }
 
+        private string _customCommandLine { get; set; }
 
-        public string CustomCommanLine { get; set; }
+        public string CustomCommandLine
+        {
+            get => _customCommandLine;
+            set => _customCommandLine = value;
+        }
     }
 }

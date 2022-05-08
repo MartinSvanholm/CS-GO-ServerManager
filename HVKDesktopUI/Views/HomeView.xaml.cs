@@ -23,6 +23,8 @@ namespace HVKDesktopUI.Views
         public HomeView()
         {
             InitializeComponent();
+
+            
         }
     }
 }

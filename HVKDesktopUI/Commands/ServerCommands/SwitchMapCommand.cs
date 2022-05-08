@@ -12,23 +12,22 @@ using System.Windows;
 
 namespace HVKDesktopUI.Commands
 {
-    internal class SwitchMapCommand : ServerCommandBase
+    public class SwitchMapCommand : ServerCommandBase
     {
-        private readonly string _map;
 
-        public SwitchMapCommand(ServerViewModel serverViewModel, string map) : base(serverViewModel)
+        public SwitchMapCommand(ServerViewModel serverViewModel) : base(serverViewModel)
         {
-            _map = map;
+
         }
 
         public async override void Execute(object parameter)
         {
-            if (_map != null)
+            if (serverViewModel.SelectedMap != null)
             {
                 try
                 {
-                    await serverViewModel.Server.SendCommand($"map de_{_map.ToLower()}");
-                    MessageBox.Show($"Skifter map til {_map.ToLower()}");
+                    await serverViewModel.Server.SendCommand($"map de_{serverViewModel.SelectedMap.ToLower().Trim()}");
+                    MessageBox.Show($"Skifter map til {serverViewModel.SelectedMap.ToLower()}");
                 }
                 catch (HttpRequestException e)
                 {

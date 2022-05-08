@@ -14,21 +14,19 @@ namespace HVKDesktopUI.Commands.ServerCommands
 {
     public class CustomCommand : ServerCommandBase
     {
-        public CustomCommand(ServerViewModel serverViewModel, string command) : base(serverViewModel)
+        public CustomCommand(ServerViewModel serverViewModel) : base(serverViewModel)
         {
-            this.command = command;
-        }
 
-        private readonly string command;
+        }
 
         public async override void Execute(object parameter)
         {
-            Trace.WriteLine(command);
-            if (command != null && command != "")
+            Trace.WriteLine(serverViewModel.CustomCommandLine);
+            if (serverViewModel.CustomCommandLine != null && serverViewModel.CustomCommandLine != "")
             {
                 try
                 {
-                    await serverViewModel.Server.SendCommand(command);
+                    await serverViewModel.Server.SendCommand(serverViewModel.CustomCommandLine);
                     MessageBox.Show("Command udført.");
                 }
                 catch (HttpRequestException e)
